@@ -1,4 +1,3 @@
-// script.js
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -11,14 +10,14 @@ const columns = canvas.width / tileSize; // Number of columns
 let pacman = {
   x: 1,
   y: 1,
-  speed: 1,
+  speed: 0.5, // Slower speed
   direction: "right",
 };
 
 // Ghosts
 const ghosts = [
-  { x: 10, y: 10, speed: 1, direction: "left" },
-  { x: 15, y: 10, speed: 1, direction: "right" },
+  { x: 10, y: 10, speed: 0.4, direction: "left" }, // Slower speed
+  { x: 15, y: 10, speed: 0.4, direction: "right" }, // Slower speed
 ];
 
 // Pellets
@@ -31,10 +30,21 @@ for (let i = 0; i < rows; i++) {
 
 // Walls (customize this to create your maze)
 const walls = [
-  { x: 5, y: 5 },
-  { x: 6, y: 5 },
-  { x: 7, y: 5 },
-  // Add more walls as needed
+  // Horizontal walls
+  { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 }, { x: 4, y: 1 }, { x: 5, y: 1 },
+  { x: 7, y: 1 }, { x: 8, y: 1 }, { x: 9, y: 1 }, { x: 10, y: 1 }, { x: 11, y: 1 },
+  { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 3 }, { x: 5, y: 3 },
+  { x: 7, y: 3 }, { x: 8, y: 3 }, { x: 9, y: 3 }, { x: 10, y: 3 }, { x: 11, y: 3 },
+  { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 },
+  { x: 7, y: 5 }, { x: 8, y: 5 }, { x: 9, y: 5 }, { x: 10, y: 5 }, { x: 11, y: 5 },
+  { x: 1, y: 7 }, { x: 2, y: 7 }, { x: 3, y: 7 }, { x: 4, y: 7 }, { x: 5, y: 7 },
+  { x: 7, y: 7 }, { x: 8, y: 7 }, { x: 9, y: 7 }, { x: 10, y: 7 }, { x: 11, y: 7 },
+
+  // Vertical walls
+  { x: 1, y: 1 }, { x: 1, y: 2 }, { x: 1, y: 3 }, { x: 1, y: 4 }, { x: 1, y: 5 }, { x: 1, y: 6 }, { x: 1, y: 7 },
+  { x: 5, y: 1 }, { x: 5, y: 2 }, { x: 5, y: 3 }, { x: 5, y: 4 }, { x: 5, y: 5 }, { x: 5, y: 6 }, { x: 5, y: 7 },
+  { x: 7, y: 1 }, { x: 7, y: 2 }, { x: 7, y: 3 }, { x: 7, y: 4 }, { x: 7, y: 5 }, { x: 7, y: 6 }, { x: 7, y: 7 },
+  { x: 11, y: 1 }, { x: 11, y: 2 }, { x: 11, y: 3 }, { x: 11, y: 4 }, { x: 11, y: 5 }, { x: 11, y: 6 }, { x: 11, y: 7 },
 ];
 
 // Game state
@@ -118,7 +128,7 @@ function movePacman() {
   if (pacman.direction === "down") newY += pacman.speed;
 
   // Check for wall collision
-  if (!checkWallCollision(newX, newY)) {
+  if (!checkWallCollision(Math.floor(newX), Math.floor(newY))) {
     pacman.x = newX;
     pacman.y = newY;
   }
@@ -131,7 +141,7 @@ function movePacman() {
 
   // Check for pellet collection
   pellets = pellets.filter((pellet) => {
-    if (pellet.x === pacman.x && pellet.y === pacman.y) {
+    if (Math.floor(pellet.x) === Math.floor(pacman.x) && Math.floor(pellet.y) === Math.floor(pacman.y)) {
       score++;
       return false;
     }
@@ -140,7 +150,7 @@ function movePacman() {
 
   // Check for ghost collision
   ghosts.forEach((ghost) => {
-    if (ghost.x === pacman.x && ghost.y === pacman.y) {
+    if (Math.floor(ghost.x) === Math.floor(pacman.x) && Math.floor(ghost.y) === Math.floor(pacman.y)) {
       gameOver = true;
     }
   });
@@ -158,7 +168,7 @@ function moveGhosts() {
     if (ghost.direction === "down") newY += ghost.speed;
 
     // Check for wall collision
-    if (!checkWallCollision(newX, newY)) {
+    if (!checkWallCollision(Math.floor(newX), Math.floor(newY))) {
       ghost.x = newX;
       ghost.y = newY;
     } else {
